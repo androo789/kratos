@@ -10,6 +10,7 @@ import (
 var _ transport.Transporter = (*Transport)(nil)
 
 // Transport is a gRPC transport.
+// 实现接口
 type Transport struct {
 	endpoint    string
 	operation   string

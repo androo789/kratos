@@ -61,6 +61,7 @@ func Logger(logger log.Logger) ServerOption {
 }
 
 // Middleware with server middleware.
+// 这些都是一个opt配置，这个就是配置中间件
 func Middleware(m ...middleware.Middleware) ServerOption {
 	return func(s *Server) {
 		s.middleware.Use(m...)
@@ -110,7 +111,9 @@ func Options(opts ...grpc.ServerOption) ServerOption {
 }
 
 // Server is a gRPC server wrapper.
+// 实现server接口
 type Server struct {
+	//继承grpc
 	*grpc.Server
 	baseCtx      context.Context
 	tlsConf      *tls.Config
@@ -141,6 +144,7 @@ func NewServer(opts ...ServerOption) *Server {
 		middleware: matcher.New(),
 	}
 	for _, o := range opts {
+		//所有opt都传了srv进去。为了给srv结构体里面的变量赋值
 		o(srv)
 	}
 	unaryInts := []grpc.UnaryServerInterceptor{
@@ -199,6 +203,7 @@ func (s *Server) Endpoint() (*url.URL, error) {
 }
 
 // Start start the gRPC server.
+// 启动
 func (s *Server) Start(ctx context.Context) error {
 	if err := s.listenAndEndpoint(); err != nil {
 		return s.err
@@ -206,6 +211,7 @@ func (s *Server) Start(ctx context.Context) error {
 	s.baseCtx = ctx
 	log.Infof("[gRPC] server listening on: %s", s.lis.Addr().String())
 	s.health.Resume()
+	//就是grpc的启动函数
 	return s.Serve(s.lis)
 }
 
@@ -222,6 +228,7 @@ func (s *Server) Stop(ctx context.Context) error {
 
 func (s *Server) listenAndEndpoint() error {
 	if s.lis == nil {
+		//本质上也是一个listen
 		lis, err := net.Listen(s.network, s.address)
 		if err != nil {
 			s.err = err
