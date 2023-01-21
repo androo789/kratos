@@ -2,6 +2,7 @@ package metrics
 
 // Counter is metrics counter.
 type Counter interface {
+	//with具体怎么实现？  普罗米修斯实现我现在只知道inc add
 	With(lvs ...string) Counter
 	Inc()
 	Add(delta float64)

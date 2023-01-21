@@ -20,8 +20,11 @@ const (
 )
 
 // Error is a status error.
+// 我觉得光是错误这一块就够我看的了
 type Error struct {
+	//这是什么，是errors.proto里面定义，errors.pb.go生成出来的type
 	Status
+	//go原生的error
 	cause error
 }
 

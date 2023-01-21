@@ -45,6 +45,7 @@ func (m Metadata) Range(f func(k, v string) bool) {
 }
 
 // Clone returns a deep copy of Metadata
+// 深度复制
 func (m Metadata) Clone() Metadata {
 	md := make(Metadata, len(m))
 	for k, v := range m {
@@ -66,6 +67,7 @@ func FromServerContext(ctx context.Context) (Metadata, bool) {
 	return md, ok
 }
 
+//这个作为key，存入context里面
 type clientMetadataKey struct{}
 
 // NewClientContext creates a new context with client md attached.
@@ -74,6 +76,7 @@ func NewClientContext(ctx context.Context, md Metadata) context.Context {
 }
 
 // FromClientContext returns the client metadata in ctx if it exists.
+// 从context里面取出meta
 func FromClientContext(ctx context.Context) (Metadata, bool) {
 	md, ok := ctx.Value(clientMetadataKey{}).(Metadata)
 	return md, ok
@@ -90,6 +93,7 @@ func AppendToClientContext(ctx context.Context, kv ...string) context.Context {
 	for i := 0; i < len(kv); i += 2 {
 		md.Set(kv[i], kv[i+1])
 	}
+	//重新生成context
 	return NewClientContext(ctx, md)
 }
 

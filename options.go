@@ -15,6 +15,7 @@ import (
 type Option func(o *options)
 
 // options is an application options.
+// option里面又包括了服务注册，日志等等东西
 type options struct {
 	id        string
 	name      string
@@ -84,6 +85,7 @@ func Signal(sigs ...os.Signal) Option {
 }
 
 // Registrar with service registry.
+// 服务注册的op，主要入参 实现了Registrar接口，就能使用
 func Registrar(r registry.Registrar) Option {
 	return func(o *options) { o.registrar = r }
 }
