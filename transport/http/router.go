@@ -20,8 +20,9 @@ type HandlerFunc func(Context) error
 
 // Router is an HTTP router.
 type Router struct {
-	prefix  string
-	pool    sync.Pool
+	prefix string
+	pool   sync.Pool
+	//是这里封装好的server
 	srv     *Server
 	filters []FilterFunc
 }
@@ -59,6 +60,7 @@ func (r *Router) Handle(method, relativePath string, h HandlerFunc, filters ...F
 	}))
 	next = FilterChain(filters...)(next)
 	next = FilterChain(r.filters...)(next)
+	//相当于mux提供了一个多路复用的框架，但是没有具体封装 get，post等等接口方式
 	r.srv.router.Handle(path.Join(r.prefix, relativePath), next).Methods(method)
 }
 

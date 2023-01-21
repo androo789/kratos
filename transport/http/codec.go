@@ -54,12 +54,14 @@ func DefaultRequestVars(r *http.Request, v interface{}) error {
 }
 
 // DefaultRequestQuery decodes the request vars to object.
+// 解码url中的请求字段
 func DefaultRequestQuery(r *http.Request, v interface{}) error {
 	return binding.BindQuery(r.URL.Query(), v)
 }
 
 // DefaultRequestDecoder decodes the request body to object.
 func DefaultRequestDecoder(r *http.Request, v interface{}) error {
+	//获取抽象的解码器对象
 	codec, ok := CodecForRequest(r, "Content-Type")
 	if !ok {
 		return errors.BadRequest("CODEC", fmt.Sprintf("unregister Content-Type: %s", r.Header.Get("Content-Type")))
@@ -67,6 +69,7 @@ func DefaultRequestDecoder(r *http.Request, v interface{}) error {
 	data, err := io.ReadAll(r.Body)
 
 	// reset body.
+	// 取出以后再存入
 	r.Body = ioutil.NopCloser(bytes.NewBuffer(data))
 
 	if err != nil {
@@ -82,6 +85,7 @@ func DefaultRequestDecoder(r *http.Request, v interface{}) error {
 }
 
 // DefaultResponseEncoder encodes the object to the HTTP response.
+// resp编码
 func DefaultResponseEncoder(w http.ResponseWriter, r *http.Request, v interface{}) error {
 	if v == nil {
 		return nil

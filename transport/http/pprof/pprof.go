@@ -6,6 +6,7 @@ import (
 )
 
 // NewHandler new a pprof handler.
+// 怎么用上呢
 func NewHandler() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/debug/pprof/", pprof.Index)

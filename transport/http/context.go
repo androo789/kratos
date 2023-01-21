@@ -19,6 +19,7 @@ import (
 var _ Context = (*wrapper)(nil)
 
 // Context is an HTTP Context.
+// 就相当于公司bm框架的context，但是kratosv2 做成了接口，而不是依赖具体的实现，感觉更高级了
 type Context interface {
 	context.Context
 	Vars() url.Values
@@ -58,7 +59,9 @@ func (w *responseWriter) Write(data []byte) (int, error) {
 	return w.w.Write(data)
 }
 
+//实现了上面的接口
 type wrapper struct {
+	//封装了router，router里面有server
 	router *Router
 	req    *http.Request
 	res    http.ResponseWriter
@@ -96,6 +99,8 @@ func (c *wrapper) Middleware(h middleware.Handler) middleware.Handler {
 	}
 	return middleware.Chain(c.router.srv.middleware.Match(c.req.URL.Path)...)(h)
 }
+
+//~一般的form参数解析就是走这里
 func (c *wrapper) Bind(v interface{}) error      { return c.router.srv.decBody(c.req, v) }
 func (c *wrapper) BindVars(v interface{}) error  { return c.router.srv.decVars(c.req, v) }
 func (c *wrapper) BindQuery(v interface{}) error { return c.router.srv.decQuery(c.req, v) }
@@ -112,12 +117,14 @@ func (c *wrapper) Result(code int, v interface{}) error {
 	return c.router.srv.enc(&c.w, c.req, v)
 }
 
+//~就是json话返回resp
 func (c *wrapper) JSON(code int, v interface{}) error {
 	c.res.Header().Set("Content-Type", "application/json")
 	c.res.WriteHeader(code)
 	return json.NewEncoder(c.res).Encode(v)
 }
 
+//跟上面的是类似的。  供调用者使用
 func (c *wrapper) XML(code int, v interface{}) error {
 	c.res.Header().Set("Content-Type", "application/xml")
 	c.res.WriteHeader(code)
