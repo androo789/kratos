@@ -165,6 +165,7 @@ func (l *Logger) Log(level log.Level, keyvals ...interface{}) error {
 		data[fmt.Sprint(keyvals[i])] = fmt.Sprint(keyvals[i+1])
 	}
 
+	//实际上报日志
 	if err := l.log.Post(level.String(), data); err != nil {
 		println(err)
 	}
