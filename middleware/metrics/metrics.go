@@ -30,8 +30,10 @@ func WithSeconds(c metrics.Observer) Option {
 
 type options struct {
 	// counter: <client/server>_requests_code_total{kind, operation, code, reason}
+	// 请求数的监控
 	requests metrics.Counter
 	// histogram: <client/server>_requests_seconds_bucket{kind, operation}
+	// 成功数的监控
 	seconds metrics.Observer
 }
 

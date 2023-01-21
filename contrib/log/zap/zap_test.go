@@ -33,6 +33,8 @@ func TestLogger(t *testing.T) {
 		EncodeDuration: zapcore.StringDurationEncoder,
 	}
 	core := zapcore.NewCore(zapcore.NewJSONEncoder(encoderCfg), syncer, zap.DebugLevel)
+	//~得到了初始的zaplog，可以new kratos的logger像这里一样
+	//~还可以set全局logger，用包名使用
 	zlogger := zap.New(core).WithOptions()
 	logger := NewLogger(zlogger)
 

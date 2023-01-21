@@ -17,6 +17,7 @@ type Transporter interface {
 }
 
 // Transport is an HTTP transport.
+// 实现了Transporter接口
 type Transport struct {
 	endpoint     string
 	operation    string
@@ -80,6 +81,7 @@ func RequestFromServerContext(ctx context.Context) (*http.Request, bool) {
 	return nil, false
 }
 
+//实现了Header接口
 type headerCarrier http.Header
 
 // Get returns the value associated with the passed key.

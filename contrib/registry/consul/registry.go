@@ -92,6 +92,8 @@ type Config struct {
 }
 
 // Registry is consul registry
+// 这个就是实现了注册和下线 2个接口
+// 但是怎么集成到
 type Registry struct {
 	cli               *Client
 	enableHealthCheck bool

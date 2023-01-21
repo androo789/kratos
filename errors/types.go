@@ -1,6 +1,7 @@
 // nolint:gomnd
 package errors
 
+// 相当于预定义一些错误吗，可以直接用
 // BadRequest new BadRequest error that is mapped to a 400 response.
 func BadRequest(reason, message string) *Error {
 	return New(400, reason, message)

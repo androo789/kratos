@@ -72,6 +72,7 @@ func (b *Builder) Match(fn MatchFunc) *Builder {
 }
 
 // Build is Builder's Build, for example: Server().Path(m1,m2).Build()
+// 根据上面的配置生成一个中间件
 func (b *Builder) Build() middleware.Middleware {
 	var transporter func(ctx context.Context) (transport.Transporter, bool)
 	if b.client {

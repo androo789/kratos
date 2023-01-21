@@ -1,3 +1,5 @@
+//所谓global就是直接使用包名字点info来打日志的对象
+//非常方便，
 package log
 
 import (
@@ -12,12 +14,14 @@ var global = &loggerAppliance{}
 
 // loggerAppliance is the proxy of `Logger` to
 // make logger change will affect all sub-logger.
+// 本质上就是一个logger，很薄的一层封装
 type loggerAppliance struct {
 	lock sync.Mutex
 	Logger
 }
 
 func init() {
+	//默认情况下，global打印到std
 	global.SetLogger(DefaultLogger)
 }
 
@@ -44,6 +48,7 @@ func Log(level Level, keyvals ...interface{}) {
 }
 
 // Context with context logger.
+// 也可以传context使用
 func Context(ctx context.Context) *Helper {
 	return NewHelper(WithContext(ctx, global.Logger))
 }
@@ -64,6 +69,7 @@ func Debugw(keyvals ...interface{}) {
 }
 
 // Info logs a message at info level.
+// 不借助helper也实现了info warn的使用
 func Info(a ...interface{}) {
 	_ = global.Log(LevelInfo, DefaultMessageKey, fmt.Sprint(a...))
 }

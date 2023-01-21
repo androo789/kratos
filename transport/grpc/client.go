@@ -62,6 +62,7 @@ func WithMiddleware(m ...middleware.Middleware) ClientOption {
 }
 
 // WithDiscovery with client discovery.
+// 实现了服务发现的接口就能传进来
 func WithDiscovery(d registry.Discovery) ClientOption {
 	return func(o *clientOptions) {
 		o.discovery = d
@@ -134,6 +135,7 @@ func DialInsecure(ctx context.Context, opts ...ClientOption) (*grpc.ClientConn, 
 	return dial(ctx, true, opts...)
 }
 
+//这里就是客户端，客户端是需要resolver的，找到指定的ip，服务端不需要resolver
 func dial(ctx context.Context, insecure bool, opts ...ClientOption) (*grpc.ClientConn, error) {
 	options := clientOptions{
 		timeout:      2000 * time.Millisecond,

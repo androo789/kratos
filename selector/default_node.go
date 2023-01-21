@@ -9,6 +9,7 @@ import (
 var _ Node = (*DefaultNode)(nil)
 
 // DefaultNode is selector node
+// 默认node是node接口的最简单实现，在node文件夹里面还有其他的实现
 type DefaultNode struct {
 	scheme   string
 	addr     string

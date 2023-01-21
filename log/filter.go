@@ -6,6 +6,7 @@ type FilterOption func(*Filter)
 const fuzzyStr = "***"
 
 // FilterLevel with filter level.
+// 屏蔽一个level
 func FilterLevel(level Level) FilterOption {
 	return func(opts *Filter) {
 		opts.level = level
@@ -13,6 +14,7 @@ func FilterLevel(level Level) FilterOption {
 }
 
 // FilterKey with filter key.
+// 屏蔽指定key
 func FilterKey(key ...string) FilterOption {
 	return func(o *Filter) {
 		for _, v := range key {
@@ -22,6 +24,7 @@ func FilterKey(key ...string) FilterOption {
 }
 
 // FilterValue with filter value.
+// 屏蔽指定value
 func FilterValue(value ...string) FilterOption {
 	return func(o *Filter) {
 		for _, v := range value {
@@ -40,9 +43,13 @@ func FilterFunc(f func(level Level, keyvals ...interface{}) bool) FilterOption {
 // Filter is a logger filter.
 type Filter struct {
 	logger Logger
-	level  Level
-	key    map[interface{}]struct{}
-	value  map[interface{}]struct{}
+	//屏蔽level
+	level Level
+	//屏蔽key
+	key map[interface{}]struct{}
+	//屏蔽value
+	value map[interface{}]struct{}
+	//自定义屏蔽规则
 	filter func(level Level, keyvals ...interface{}) bool
 }
 
@@ -60,6 +67,7 @@ func NewFilter(logger Logger, opts ...FilterOption) *Filter {
 }
 
 // Log Print log by level and keyvals.
+// 实现了log接口
 func (f *Filter) Log(level Level, keyvals ...interface{}) error {
 	if level < f.level {
 		return nil

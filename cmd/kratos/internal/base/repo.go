@@ -81,6 +81,7 @@ func (r *Repo) Pull(ctx context.Context) error {
 }
 
 // Clone clones the repository to cache path.
+// 真是自己做了一个clone下来，牛啊
 func (r *Repo) Clone(ctx context.Context) error {
 	if _, err := os.Stat(r.Path()); !os.IsNotExist(err) {
 		return r.Pull(ctx)

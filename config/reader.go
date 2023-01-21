@@ -9,13 +9,14 @@ import (
 	"sync"
 
 	"github.com/imdario/mergo"
-	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/encoding/protojson" //proto转json吗
 	"google.golang.org/protobuf/proto"
 
 	"github.com/go-kratos/kratos/v2/log"
 )
 
 // Reader is config reader.
+// 我也不知道为啥叫reader，还能合并
 type Reader interface {
 	Merge(...*KeyValue) error
 	Value(string) (Value, bool)
@@ -102,6 +103,7 @@ func cloneMap(src map[string]interface{}) (map[string]interface{}, error) {
 	return clone, nil
 }
 
+//应该是一个解开嵌套的一个巧妙做的
 func convertMap(src interface{}) interface{} {
 	switch m := src.(type) {
 	case map[string]interface{}:

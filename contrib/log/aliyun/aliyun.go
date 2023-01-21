@@ -99,6 +99,7 @@ func (a *aliyunLog) Log(level log.Level, keyvals ...interface{}) error {
 		Time:     proto.Uint32(uint32(time.Now().Unix())),
 		Contents: contents,
 	}
+	//实际上就是传到阿里云上去了
 	return a.producer.SendLog(a.opts.project, a.opts.logstore, "", "", logInst)
 }
 

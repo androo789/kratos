@@ -136,7 +136,9 @@ func PathPrefix(prefix string) ServerOption {
 }
 
 // Server is an HTTP server wrapper.
+// 实现了Server接口，start，stop方法
 type Server struct {
+	//继承go原生的server
 	*http.Server
 	lis         net.Listener
 	tlsConf     *tls.Config
@@ -148,12 +150,13 @@ type Server struct {
 	filters     []FilterFunc
 	middleware  matcher.Matcher
 	decVars     DecodeRequestFunc
-	decQuery    DecodeRequestFunc
-	decBody     DecodeRequestFunc
-	enc         EncodeResponseFunc
+	decQuery    DecodeRequestFunc  //req的url参数的解码
+	decBody     DecodeRequestFunc  //req的body的解码
+	enc         EncodeResponseFunc //resp编码
 	ene         EncodeErrorFunc
 	strictSlash bool
-	router      *mux.Router
+	//也是对mux工具的一个封装
+	router *mux.Router
 }
 
 // NewServer creates an HTTP server by options.
@@ -178,6 +181,7 @@ func NewServer(opts ...ServerOption) *Server {
 	srv.router.NotFoundHandler = http.DefaultServeMux
 	srv.router.MethodNotAllowedHandler = http.DefaultServeMux
 	srv.router.Use(srv.filter())
+	//go原生的server
 	srv.Server = &http.Server{
 		Handler:   FilterChain(srv.filters...)(srv.router),
 		TLSConfig: srv.tlsConf,
@@ -285,6 +289,7 @@ func (s *Server) filter() mux.MiddlewareFunc {
 //
 //	https://127.0.0.1:8000
 //	Legacy: http://127.0.0.1:8000?isSecure=false
+// 实现Endpointer接口
 func (s *Server) Endpoint() (*url.URL, error) {
 	if err := s.listenAndEndpoint(); err != nil {
 		return nil, err
@@ -294,6 +299,7 @@ func (s *Server) Endpoint() (*url.URL, error) {
 
 // Start start the HTTP server.
 func (s *Server) Start(ctx context.Context) error {
+	//先listen
 	if err := s.listenAndEndpoint(); err != nil {
 		return err
 	}
@@ -305,6 +311,7 @@ func (s *Server) Start(ctx context.Context) error {
 	if s.tlsConf != nil {
 		err = s.ServeTLS(s.lis, "", "")
 	} else {
+		//go 原生方法
 		err = s.Serve(s.lis)
 	}
 	if !errors.Is(err, http.ErrServerClosed) {

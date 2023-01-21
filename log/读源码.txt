@@ -1,0 +1,10 @@
+也是https://go-kratos.dev/docs/component/log的读后感
+1
+他这个log的做法不是引入包，打日志
+是把log对象做好传入各个biz 各个data，
+然后再使用
+2
+也够直接用包的方式，都有
+3
+done，这套api设计的很好啊
+看明白了

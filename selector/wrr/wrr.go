@@ -22,8 +22,10 @@ type Option func(o *options)
 type options struct{}
 
 // Balancer is a random balancer.
+// 实现了Balancer接口
 type Balancer struct {
-	mu            sync.Mutex
+	mu sync.Mutex
+	//key是节点地址，value是权重
 	currentWeight map[string]float64
 }
 
@@ -33,6 +35,7 @@ func New(opts ...Option) selector.Selector {
 }
 
 // Pick is pick a weighted node.
+// 实现了Balancer接口
 func (p *Balancer) Pick(_ context.Context, nodes []selector.WeightedNode) (selector.WeightedNode, selector.DoneFunc, error) {
 	if len(nodes) == 0 {
 		return nil, nil, selector.ErrNoAvailable
@@ -42,6 +45,8 @@ func (p *Balancer) Pick(_ context.Context, nodes []selector.WeightedNode) (selec
 	var selectWeight float64
 
 	// nginx wrr load balancing algorithm: http://blog.csdn.net/zhangskd/article/details/50194069
+	// 具体算法实现看看
+	// 有例子证明，
 	p.mu.Lock()
 	for _, node := range nodes {
 		totalWeight += node.Weight()
@@ -62,6 +67,7 @@ func (p *Balancer) Pick(_ context.Context, nodes []selector.WeightedNode) (selec
 }
 
 // NewBuilder returns a selector builder with wrr balancer
+// 通过builder实现了
 func NewBuilder(opts ...Option) selector.Builder {
 	var option options
 	for _, opt := range opts {

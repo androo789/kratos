@@ -28,6 +28,7 @@ type AppInfo interface {
 
 // App is an application components lifecycle manager.
 type App struct {
+	//一个服务的各种option
 	opts     options
 	ctx      context.Context
 	cancel   func()

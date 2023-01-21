@@ -30,6 +30,7 @@ type options struct {
 
 // Server ratelimiter middleware
 func Server(opts ...Option) middleware.Middleware {
+	//这里就是使用 bbr限流的。bbr限流的实现在另一个地方
 	options := &options{
 		limiter: bbr.NewLimiter(),
 	}

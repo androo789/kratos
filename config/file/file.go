@@ -60,6 +60,7 @@ func (f *file) loadDir(path string) (kvs []*config.KeyValue, err error) {
 	return
 }
 
+//这就算是实现了
 func (f *file) Load() (kvs []*config.KeyValue, err error) {
 	fi, err := os.Stat(f.path)
 	if err != nil {

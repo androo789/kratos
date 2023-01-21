@@ -29,6 +29,7 @@ type Observer func(string, Value)
 
 // Config is a config interface.
 type Config interface {
+	//给用户的用法就是先载入，然后scan赋值给自己的结构体，就这么简单，极简api
 	Load() error
 	Scan(v interface{}) error
 	Value(key string) Value
@@ -36,6 +37,7 @@ type Config interface {
 	Close() error
 }
 
+//实现了上面的接口
 type config struct {
 	opts      options
 	reader    Reader
@@ -133,6 +135,7 @@ func (c *config) Value(key string) Value {
 }
 
 func (c *config) Scan(v interface{}) error {
+	//获取比特序列的数据
 	data, err := c.reader.Source()
 	if err != nil {
 		return err

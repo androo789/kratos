@@ -1,0 +1,5 @@
+mux是什么，有什么意义
+注册path，然后接收请求给到这个path、
+是对原生ServeMux的增强，至少支持post get等不同方法（原生库不区分get post的，很弱的）
+就省得kratos也是实现一遍了
+

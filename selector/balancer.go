@@ -7,6 +7,7 @@ import (
 
 // Balancer is balancer interface
 type Balancer interface {
+	//这里就是输入节点，输出节点
 	Pick(ctx context.Context, nodes []WeightedNode) (selected WeightedNode, done DoneFunc, err error)
 }
 
@@ -16,6 +17,7 @@ type BalancerBuilder interface {
 }
 
 // WeightedNode calculates scheduling weight in real time
+// 在节点的基础上再新加几个函数，要实现
 type WeightedNode interface {
 	Node
 
