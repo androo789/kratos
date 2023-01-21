@@ -11,16 +11,19 @@ var ErrNoAvailable = errors.ServiceUnavailable("no_available_node", "")
 
 // Selector is node pick balancer.
 type Selector interface {
+	//算是接口组合另一个接口
 	Rebalancer
 
 	// Select nodes
 	// if err == nil, selected and done must not be empty.
+	// 意义上就是没有入参，就输出一个节点
 	Select(ctx context.Context, opts ...SelectOption) (selected Node, done DoneFunc, err error)
 }
 
 // Rebalancer is nodes rebalancer.
 type Rebalancer interface {
 	// Apply is apply all nodes when any changes happen
+	// 就是给选择器输入所有的节点信息，以供选择
 	Apply(nodes []Node)
 }
 
@@ -30,6 +33,7 @@ type Builder interface {
 }
 
 // Node is node interface.
+// 节点本身需要实现这个接口
 type Node interface {
 	// Scheme is service node scheme
 	Scheme() string
