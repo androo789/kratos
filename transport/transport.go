@@ -13,6 +13,7 @@ import (
 )
 
 // Server is transport server.
+// 这是服务端的抽象，启动一个服务，下线一个服务。里面的http grpc文件夹就是具体实现了这两个接口
 type Server interface {
 	Start(context.Context) error
 	Stop(context.Context) error
@@ -24,13 +25,16 @@ type Endpointer interface {
 }
 
 // Header is the storage medium used by a Header.
+// 因为http的头和grpc的头是不一样的，所以也用了接口，依赖接口而不是依赖具体实现
 type Header interface {
 	Get(key string) string
 	Set(key string, value string)
+	//获取header中的所有key
 	Keys() []string
 }
 
 // Transporter is transport context value interface.
+// 传输的抽象
 type Transporter interface {
 	// Kind transporter
 	// grpc
