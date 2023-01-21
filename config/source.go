@@ -9,6 +9,7 @@ type KeyValue struct {
 
 // Source is config source.
 type Source interface {
+	//返回kv对
 	Load() ([]*KeyValue, error)
 	Watch() (Watcher, error)
 }
