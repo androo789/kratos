@@ -17,7 +17,9 @@ type Redacter interface {
 }
 
 // Server is an server logging middleware.
+// 意义就是服务端接收端一个请求以后，打印日志
 func Server(logger log.Logger) middleware.Middleware {
+	//来一个请求，返回来是一个请求
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (reply interface{}, err error) {
 			var (
@@ -31,12 +33,14 @@ func Server(logger log.Logger) middleware.Middleware {
 				kind = info.Kind().String()
 				operation = info.Operation()
 			}
+			//执行后面的逻辑
 			reply, err = handler(ctx, req)
 			if se := errors.FromError(err); se != nil {
 				code = se.Code
 				reason = se.Reason
 			}
 			level, stack := extractError(err)
+			//最后打印日志
 			_ = log.WithContext(ctx, logger).Log(level,
 				"kind", "server",
 				"component", kind,

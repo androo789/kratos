@@ -73,6 +73,7 @@ func setServerSpan(ctx context.Context, span trace.Span, m interface{}) {
 				method := ht.Request().Method
 				route := ht.PathTemplate()
 				path := ht.Request().URL.Path
+				//按照opentelemetry就是要收集这些数据
 				attrs = append(attrs, semconv.HTTPMethodKey.String(method))
 				attrs = append(attrs, semconv.HTTPRouteKey.String(route))
 				attrs = append(attrs, semconv.HTTPTargetKey.String(path))

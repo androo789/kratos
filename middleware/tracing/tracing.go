@@ -44,6 +44,7 @@ func WithTracerName(tracerName string) Option {
 }
 
 // Server returns a new server middleware for OpenTelemetry.
+// 服务端的trace TODO
 func Server(opts ...Option) middleware.Middleware {
 	tracer := NewTracer(trace.SpanKindServer, opts...)
 	return func(handler middleware.Handler) middleware.Handler {
